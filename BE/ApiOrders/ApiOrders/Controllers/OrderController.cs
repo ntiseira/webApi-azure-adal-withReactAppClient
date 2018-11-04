@@ -11,7 +11,7 @@ using System.Web.Http;
 
 namespace OrdersManager.Api.Controllers
 {
-    [Authorize]
+  //  [Authorize]
     [RoutePrefix("api")]
     public class OrderController : ApiController
     {
