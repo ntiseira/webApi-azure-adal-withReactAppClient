@@ -37,7 +37,10 @@ namespace OrdersManager.Api.Filters
             }
             catch (Exception ex)
             {
-                    throw ex;
+                throw ex;
+            }
+            finally {
+                UnitOfWork.Dispose();
             }
         }
     }

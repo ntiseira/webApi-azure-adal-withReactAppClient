@@ -7,14 +7,14 @@ import axios from 'axios';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
-export const requestData = (pageSize) => {
+export const requestData = (page,  sorted, filtered) => {
   return new Promise((resolve, reject) => {
-
+  
     var requestCriteria = {
-      PageNumber: (pageSize > 0 ? pageSize : 1 ),  
-      Filter: "",
-      OrderAsc: true,
-      OrderBy:  ""
+      PageNumber: page +1, //Add 1 becasuse react table initialize and manage page number starting by zero //(page > 0 ? page : 1 ),  
+      Filter: (filtered.length > 0 ) ? filtered[0].value : "",
+      OrderAsc: (sorted.length > 0 ) ? !sorted[0].desc : "" ,
+      OrderBy:  (sorted.length > 0 ) ? sorted[0].id : ""
        };
 
        axios({
@@ -39,7 +39,10 @@ class App extends Component {
     this.state = {
       data: [],
       pages: null,
-      loading: true
+      loading: true,
+      page: 1,
+      sorted: "",
+      filtered: ""
     };
 
 this.fetchData = this.fetchData.bind(this);
@@ -53,14 +56,17 @@ fetchData(state, instance) {
   // You can set the `loading` prop of the table to true to use the built-in one or show you're own loading bar if you want.
   this.setState({ loading: true });
   // Request the data however you want.  Here, we'll use our mocked service we created earlier
-
+  
      requestData(   
-      state.page     
+      state.page,
+      state.sorted,
+      state.filtered 
+
     ).then(response => {
       // Now just get the rows of data to your React Table (and update anything else like total pages or loading)
       this.setState({
         data: response.data.CurrentPageItems,
-          pages: response.data.TotalPages,
+        pages: response.data.TotalPages,
         loading: false
       });
   });
@@ -73,6 +79,7 @@ fetchData(state, instance) {
 render() {
 
   let data = this.state.data;
+  let pages = this.state.pages;
 
    const columns = [{
     Header: 'Id',
@@ -106,6 +113,7 @@ render() {
     <div>
     <ReactTable
       data={data}
+      pages={pages} // Display the total number of pages
       columns={columns}    
       defaultPageSize={10}
       className="-striped -highlight"
