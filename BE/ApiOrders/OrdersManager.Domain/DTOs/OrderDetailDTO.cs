@@ -14,7 +14,7 @@ namespace OrdersManager.Domain.DTOs
 
         public int Quantity{ get; set; }
 
-        public int Distcount { get; set; }
+        public int Discount { get; set; }
 
     }
 }

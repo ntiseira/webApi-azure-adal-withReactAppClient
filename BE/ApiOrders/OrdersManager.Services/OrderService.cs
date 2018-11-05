@@ -19,6 +19,7 @@ namespace OrdersManager.Services
 
         private readonly IUnitOfWork unitOfWork;
         private Data.Repository.Base.IRepository<Order> orderRepository;
+        private Data.Repository.Base.IRepository<OrderDetail> orderDetailsRepository;
 
 
         /// <inheritdoc />
@@ -82,17 +83,15 @@ namespace OrdersManager.Services
             int totalItems;
 
             IQueryable<Order> q = orderRepository.GetAll(out totalItems, criteria.PageNumber,
-                pageSize, filterExpression, criteria.OrderAsc, new string[] { "OrderCustomer", "OrdersDetails", "OrdersDetails.ProductSold" },orderByExpressions);
-
-            var lista = q.ToList();
-
+                pageSize, filterExpression, criteria.OrderAsc, new string[] { "OrderCustomer"},orderByExpressions);
+            
             //parse to DTO
             List<OrderDTO> items = q.ToList().Select(m => new OrderDTO
             {
                 Id = m.Id,
                 Created_At = m.Created_At,
                 OrderCustomer = m.OrderCustomer,
-                Details = m.OrdersDetails.Select(a => new OrderDetailDTO { Id = a.Id, Distcount = a.Discount, ProductName = a.ProductSold.Name, Quantity = a.Quantity }).ToList(),
+              //  Details = m.OrdersDetails.Select(a => new OrderDetailDTO { Id = a.Id, Discount = a.Discount, ProductName = a.ProductSold.Name, Quantity = a.Quantity }).ToList(),
                 shipAdress = m.ShipAdress,
                 shipCity = m.ShipCity,
                 shipCountry= m.ShipCountry,
@@ -103,6 +102,52 @@ namespace OrdersManager.Services
             return new PagedListDTO<OrderDTO>(totalItems, pageSize, items, criteria.PageNumber);
         }
 
+        public PagedListDTO<OrderDetailDTO> GetOrdersDetails(BaseCriteriaDTO criteria)
+        {
+
+            orderDetailsRepository = unitOfWork.GetRepository<OrderDetail>();
+
+            //PageSize
+            int pageSize = Convert.ToInt32(ConfigurationManager.AppSettings["pageSize"].ToString());
+
+            //filter (expression in DB)
+            Expression<Func<OrderDetail, bool>> filterExpression = x =>x.Id == criteria.IdOrder;
+            
+            if (!string.IsNullOrWhiteSpace(criteria.Filter))
+
+                filterExpression = filterExpression.Join(
+                         x =>
+                         x.ProductSold.Name.ToUpper().Contains(criteria.Filter.ToUpper()) ||
+                         x.Quantity.ToString().ToUpper().Contains(criteria.Filter.ToUpper())
+                        || x.Discount.ToString().ToUpper().Contains(criteria.Filter.ToUpper())                        
+                        );
+
+            //order by
+            Expression<Func<OrderDetail, object>>[] orderByExpressions = this.GetOrderDetailsByExpressions_Orders(criteria.OrderBy);
+
+            //get entities
+            int totalItems;
+
+            IQueryable<OrderDetail> q = orderDetailsRepository.GetAll(out totalItems, criteria.PageNumber,
+                pageSize, filterExpression, criteria.OrderAsc, new string[] { "ProductSold" }, orderByExpressions);
+
+            var listOrderDetails = q.ToList();
+
+            //parse to DTO
+            List<OrderDetailDTO> items = q.ToList().Select(m => new OrderDetailDTO
+            {
+                Id = m.Id,
+                ProductName = m.ProductSold.Name,
+                Quantity = m.Quantity,                
+                Discount= m.Discount
+            }).ToList();
+
+            return new PagedListDTO<OrderDetailDTO>(totalItems, pageSize, items, criteria.PageNumber);
+        }
+
+
+
+        #region Private Methods
 
         private Expression<Func<Order, object>>[] GetOrderByExpressions_Orders(string orderBy)
         {
@@ -131,5 +176,30 @@ namespace OrdersManager.Services
              result.Add((Order x) => x.Created_At);
             return result.ToArray();
         }
+
+
+        private Expression<Func<OrderDetail, object>>[] GetOrderDetailsByExpressions_Orders(string orderBy)
+        {
+            var result = new List<Expression<Func<OrderDetail, object>>>();
+
+            switch (orderBy)
+            {
+                case nameof(OrderDetailDTO.Id):
+                result.Add((OrderDetail x) => x.Id); break;
+                case nameof(OrderDetailDTO.ProductName):
+                result.Add((OrderDetail x) => x.ProductSold.Name); break;
+                case nameof(OrderDetailDTO.Quantity):
+                result.Add((OrderDetail x) => x.Quantity); break;
+                case nameof(OrderDetailDTO.Discount):
+                result.Add((OrderDetail x) => x.Discount);           
+                break;//this is considered by default
+            }
+
+            result.Add((OrderDetail x) => x.OrderId);
+
+            return result.ToArray();
+        }
+
+        #endregion
     }
 }

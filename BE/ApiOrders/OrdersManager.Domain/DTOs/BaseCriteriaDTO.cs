@@ -8,7 +8,10 @@ namespace OrdersManager.Domain.DTOs
 {
     public class BaseCriteriaDTO
     {
+        public int IdOrder { get; set; }
+
         public int PageNumber { get; set; }
+
         private string _filter;
         public string Filter
         {

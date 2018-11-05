@@ -11,20 +11,11 @@ using System.Threading.Tasks;
 namespace OrdersManager.Data.Context
 {
     public class OrderContext : DbContext
-        //, IDbContext
     {
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="DeviceContext"/> class.
-        ///// </summary>
-        ///// <param name="options">The options.</param>
-        //public OrderContext(DbContext options)
-        // //   : base(options)
-        //{
-        //    // TODO: Comment below this if you are running migrations commands
-        //    // TODO: uncomment below line of you are running the application for the first time
-        //    //this.Database.EnsureCreated();
-        //}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderContext"/> class.
+        /// </summary>
         public OrderContext()
                    : base("Name=OrderContext")
         {

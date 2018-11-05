@@ -117,17 +117,9 @@ namespace OrdersManager.Data.Repository.Base
         /// <inheritdoc />
         public virtual EntityState Update(T entity)
         {
-
-            dbSet.Add(entity);
-
-            
+            dbSet.Add(entity);            
             var entry = context.Entry(entity);
             entry.State =  EntityState.Modified;
-
-            //context.Entry(entity).State = EntityState.Detached;
-
-
-            //context.Entry(entity).State = EntityState.Modified;
             
             return context.Entry(entity).State;
         }

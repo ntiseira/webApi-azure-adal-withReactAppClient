@@ -136,6 +136,29 @@ namespace OrdersManager.Test
 
 
 
+        [Test]
+        public void GetOrderDetails()
+        {
+
+            var orderController = UnityConfig.Resolve<OrderController>();
+
+            BaseCriteriaDTO criteria = new BaseCriteriaDTO
+            {   IdOrder = 1,
+                Filter = "",
+                OrderAsc = true,
+                OrderBy = "",
+                PageNumber = 1
+            };
+
+            var postResult = orderController.PostGetOrdersDetails(criteria);
+
+            var listOrders = postResult as OkNegotiatedContentResult<PagedListDTO<OrderDetailDTO>>;
+
+
+            Assert.IsTrue(listOrders.Content.TotalItems > 0);
+        }
+
+
 
 
     }

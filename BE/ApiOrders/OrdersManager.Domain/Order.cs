@@ -10,14 +10,14 @@ namespace OrdersManager.Domain
    public class Order : BaseEntity
     {
 
-        public Customer OrderCustomer { get; set; }
+         public Customer OrderCustomer { get; set; }
 
-        public List<OrderDetail> OrdersDetails { get; set; }
+         public List<OrderDetail> OrdersDetails { get; set; }
 
-        public int CustomerId { get; set; }
+         public int CustomerId { get; set; }
 
          public DateTime  Created_At { get; set; }
-        public string ShipAdress { get; set; }
+         public string ShipAdress { get; set; }
          public string ShipCity { get; set; }
 
          public string ShipPostalCode { get; set; }
