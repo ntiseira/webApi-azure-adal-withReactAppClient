@@ -83,15 +83,15 @@ namespace OrdersManager.Services
             int totalItems;
 
             IQueryable<Order> q = orderRepository.GetAll(out totalItems, criteria.PageNumber,
-                pageSize, filterExpression, criteria.OrderAsc, new string[] { "OrderCustomer"},orderByExpressions);
-            
+                pageSize, filterExpression, criteria.OrderAsc, new string[] { "OrderCustomer", "OrdersDetails", "OrdersDetails.ProductSold" }, orderByExpressions);
+
             //parse to DTO
             List<OrderDTO> items = q.ToList().Select(m => new OrderDTO
             {
                 Id = m.Id,
                 Created_At = m.Created_At,
                 OrderCustomer = m.OrderCustomer,
-              //  Details = m.OrdersDetails.Select(a => new OrderDetailDTO { Id = a.Id, Discount = a.Discount, ProductName = a.ProductSold.Name, Quantity = a.Quantity }).ToList(),
+                Details = m.OrdersDetails.Select(a => new OrderDetailDTO { Id = a.Id, Discount = a.Discount, ProductName = a.ProductSold.Name, Quantity = a.Quantity }).ToList(),
                 shipAdress = m.ShipAdress,
                 shipCity = m.ShipCity,
                 shipCountry= m.ShipCountry,
@@ -173,7 +173,8 @@ namespace OrdersManager.Services
                 break;//this is considered by default
             }
 
-             result.Add((Order x) => x.Created_At);
+            result.Add((Order x) => x.Id);
+            result.Add((Order x) => x.Created_At);
             return result.ToArray();
         }
 

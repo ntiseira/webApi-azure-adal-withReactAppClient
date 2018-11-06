@@ -32,31 +32,6 @@ export const requestData = (page,  sorted, filtered) => {
 };
 
 
-export const requestDataDetails = (pagesDetails, idOrder,  sorted, filtered) => {
-  return new Promise((resolve, reject) => {
-  
-    var requestCriteria = {
-      IdOrder: idOrder,
-      PageNumber: 1, //Add 1 becasuse react table initialize and manage page number starting by zero //(page > 0 ? page : 1 ),  
-      Filter: (filtered.length > 0 ) ? filtered[0].value : "",
-      OrderAsc: (sorted.length > 0 ) ? !sorted[0].desc : "" ,
-      OrderBy:  (sorted.length > 0 ) ? sorted[0].id : ""
-       };
-
-       axios({
-        method: 'post',
-        url: 'http://localhost:51590/api/Order/PostGetOrdersDetails',
-        data: requestCriteria
-      })
-      .then(function (response){     
-        resolve(response);
-        })        
-      .catch(function (error) {
-        console.log(error); //TODO: Revisar el manejo de excepciones
-      });
-  });
-};
-
 
 class App extends Component {
   constructor() {
@@ -64,21 +39,18 @@ class App extends Component {
   
     this.state = {
       data: [],
-      dataDetails: [],
+    //  dataDetails: [],
       pages: null,  
-      pagesDetails: null,
+     // pagesDetails: null,
       loading: true,
       page: 1,
-      pageDetails:1,
+     // pageDetails:1,
       sorted: "",
-      filtered: "",
-      sortedDetail: "",
-      filteredDetail: ""
+      filtered: ""
+     
     };
 
 this.fetchData = this.fetchData.bind(this);
-
-this.fetchDataDetails = this.fetchDataDetails.bind(this);
 
 }
 
@@ -106,41 +78,30 @@ fetchData(state, instance) {
 }
 
 
-fetchDataDetails(state,  instance) {
-  // Whenever the table model changes, or the user sorts or changes pages, this method gets called and passed the current table model.
-  // You can set the `loading` prop of the table to true to use the built-in one or show you're own loading bar if you want.
-  this.setState({ loading: true });
-  // Request the data however you want.  Here, we'll use our mocked service we created earlier
-  
-  requestDataDetails(   
-    state.pageDetails,
-          1,
-          "",
-          ""
-    /* TODO CHANGE IT TO WORK
-      state.pageDetails,
-      1, //orderId
-      state.sortedDetail,
-      state.filteredDetail 
-*/
-    ).then(response => {
-      // Now just get the rows of data to your React Table (and update anything else like total pages or loading)
-      this.setState({
-        dataDetails: response.data.CurrentPageItems,
-        pagesDetails: response.data.TotalPages,
-        loading: false
-      });
-  });
+
+renderEditable(cellInfo) {
+  return (
+    <div
+      style={{ backgroundColor: "#fafafa" }}
+      contentEditable
+      suppressContentEditableWarning
+      onBlur={e => {
+       // const data = [...this.state.data];
+     //   data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+       // this.setState({ data });
+      }}
+    //  dangerouslySetInnerHTML={{
+     //   __html: this.state.data[cellInfo.index][cellInfo.column.id]
+      //}}
+    />
+  );
 }
-
-
 
 render() {
 
   let data = this.state.data;
   let pages = this.state.pages;
-  let pagesDetails = this.state.pagesDetails;
-  let dataDetails = this.state.dataDetails;
+
 
    const OrderColumns = [{
     Header: 'Id',
@@ -180,10 +141,13 @@ const OrderDetailColumns = [{
   //, Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
 }, {
   Header: 'Quantity',
-  accessor: 'Quantity' // String-based value accessors!
+  accessor: 'Quantity' ,// String-based value accessors!
+  Cell: this.renderEditable
 }, {
-  Header: 'Distcount',
-  accessor: 'Distcount' // String-based value accessors!
+  Header: 'Discount',
+  accessor: 'Discount' ,// String-based value accessors!
+  Cell: this.renderEditable
+
 }
 ];
  
@@ -193,6 +157,7 @@ const OrderDetailColumns = [{
       <br/>
       <br/>
     <ReactTable
+
       data={data}
       pages={pages} // Display the total number of pages
       columns={OrderColumns}    
@@ -202,6 +167,8 @@ const OrderDetailColumns = [{
       manual // informs React Table that you'll be handling sorting and pagination server-side
       onFetchData={this.fetchData} // Request new data when things change
       filterable
+      freezeWhenExpanded={true}
+
       SubComponent={row => {
         return (
           <div style={{ padding: "20px" }}>
@@ -211,14 +178,18 @@ const OrderDetailColumns = [{
             <br />
             <br />
             <ReactTable
-              data={dataDetails}
-              pages={pagesDetails} // Display the total number of pages
+              data={row.original.Details}
               columns={OrderDetailColumns}
-              defaultPageSize={10}
-              showPagination={false}      
-             // manual // informs React Table that you'll be handling sorting and pagination server-side
-              onFetchData={this.fetchDataDetails} // Request new data when things change             
+              showPagination={false}                            
               filterable
+              defaultSorted={[
+                {
+                  id: "Id",
+                  desc: false
+                }
+              ]}
+              noDataText= {'No rows found'}
+
             />
           </div>
         );
