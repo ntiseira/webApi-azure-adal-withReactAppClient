@@ -68,7 +68,7 @@ class App extends Component {
 this.fetchData = this.fetchData.bind(this);
 
 this.renderEditable = this.renderEditable.bind(this);
-
+this.onKeyPressed = this.onKeyPressed.bind(this);
 }
 
 
@@ -93,12 +93,40 @@ fetchData(state, instance) {
   });
 }
 
+onKeyPressed =(event)=>{
+ 
+  var key = window.event ? event.keyCode : event.which;
+  if (event.keyCode === 8 || event.keyCode === 46) {
+    console.log("true"); 
+    return true;
+  } else if ( key < 48 || key > 57 ) {
+    console.log("false");
+    event.stopPropagation();
+
+      return false;
+  } else {
+    console.log("true ult else"); 
+      return true;
+  }
+
+}
+
+isNumberKey(evt){
+  var charCode = (evt.which) ? evt.which : evt.keyCode
+  return !(charCode > 31 && (charCode < 48 || charCode > 57));
+}
+
 
 renderEditable = cellInfo => {
 
 
   return (
     <div
+    
+      onKeyDown={this.onKeyPressed}
+      onKeyPress={this.onKeyPressed}
+      onKeyUp={this.onKeyPressed}
+      //pattern="[0-9]*"
       style={{ backgroundColor: "#fafafa" }}
       contentEditable
       suppressContentEditableWarning
@@ -116,10 +144,11 @@ renderEditable = cellInfo => {
           });     
         } 
 
+        
       }}
       dangerouslySetInnerHTML={        
       {        
-        __html: cellInfo.value
+        __html: cellInfo.value 
       }}
     />
   );
@@ -182,6 +211,7 @@ getOrderDetailsColumnsTable()
     accessor: 'Discount' // String-based value accessors!
     //, Cell: row => ( row.value )
    , Cell: this.renderEditable
+  
   
   
   }

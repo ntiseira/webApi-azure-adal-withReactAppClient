@@ -130,7 +130,7 @@ namespace OrdersManager.Test
             entity.Details[0].Quantity = 10000;
             entity.Details[0].Discount= 10000;
 
-            orderController.PostEditOrder(entity);
+           // orderController.PostEditOrder(entity);
 
                 UnityConfig.Resolve<IUnitOfWork>().Commit();
            
