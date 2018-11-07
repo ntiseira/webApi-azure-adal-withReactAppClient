@@ -54,13 +54,13 @@ namespace OrdersManager.Api.Controllers
         }
 
 
-        [Route("Order/PostEditOrder")]
-        public IHttpActionResult PostEditOrder([FromBody]OrderDTO orderDto)
+        [Route("Order/PostEditOrderDetail")]
+        public IHttpActionResult PostEditOrder([FromBody]OrderDetailDTO orderDetailDTO)
         {
-            if (orderDto == null)
+            if (orderDetailDTO == null)
                 return BadRequest();
 
-            orderService.EditOrder(orderDto);
+            orderService.EditOrderDetail(orderDetailDTO);
 
             return Ok();
         }

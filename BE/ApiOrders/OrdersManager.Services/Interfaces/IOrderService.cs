@@ -35,6 +35,6 @@ namespace OrdersManager.Services.Interfaces
         /// Edit orders
         /// </summary>
         /// <param name="orderEntity"></param>
-       void EditOrder(OrderDTO orderEntity);
+       void EditOrderDetail(OrderDetailDTO orderDetailEntity);
     }
 }

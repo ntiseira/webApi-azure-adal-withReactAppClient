@@ -34,20 +34,13 @@ export const requestData = (page,  sorted, filtered) => {
 };
 
 
-export const UpdateDataDetails = (idOrder, details) => {
+export const UpdateDataDetails = (detail) => {
   return new Promise((resolve, reject) => {
-  
-    var requestPost = {
-      Id: idOrder,
-      Details: details
-       };
-
-       //requestPost.Details[0] =  details;
-
-       axios({
+ 
+    axios({
         method: 'post',
-        url: 'http://localhost:51590/api/Order/PostEditOrder',
-        data: requestPost
+        url: 'http://localhost:51590/api/Order/PostEditOrderDetail',
+        data: detail
       })
       .then(function (response){     
         resolve(response);
@@ -69,31 +62,13 @@ class App extends Component {
       loading: true,
       page: 1,
       sorted: "",
-      filtered: "",
-      lastOrderSelected: null
+      filtered: ""   
     };
 
 this.fetchData = this.fetchData.bind(this);
 
 this.renderEditable = this.renderEditable.bind(this);
-this.setLastOrderSelected = this.setLastOrderSelected.bind(this);
-this.getLastOrderSelected = this.getLastOrderSelected.bind(this);
 
-}
-
-setLastOrderSelected(id)
-{
-  this.setState({
-    lastOrderSelected: id
-  });
-
-
-}
-
-getLastOrderSelected()
-{
-
-  return this.state.lastOrderSelected;
 }
 
 
@@ -120,7 +95,7 @@ fetchData(state, instance) {
 
 
 renderEditable = cellInfo => {
-let dataTest = this.getLastOrderSelected();
+
 
   return (
     <div
@@ -130,34 +105,32 @@ let dataTest = this.getLastOrderSelected();
       onBlur={e => {
         const data = [...this.state.data];
         
-        //data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-        if (data[dataTest].Details.find(a=> a.Id = cellInfo.row._original.Id)[cellInfo.column.id].toString() !== e.target.innerHTML)
+        //Validate if field changed to call BE to update orderDetail Item
+        if (data.find(a=> a.Id === cellInfo.original.OrderId).Details[cellInfo.index][cellInfo.column.id].toString() !== e.target.innerHTML)
         {
-        this.setState({ data });
-     
-        console.log(dataTest);
+            data.find(a=> a.Id === cellInfo.original.OrderId).Details[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
 
-       UpdateDataDetails(cellInfo.row._original.OrderId,  data.find(x => x.Id === cellInfo.row._original.OrderId).Details).then(response => {
-                          
-          this.setState({ data });
-      });
- 
-}
+            UpdateDataDetails(data.find(a=> a.Id === cellInfo.original.OrderId).Details[cellInfo.index]).then(response => {
+          
+              this.setState({ data });
+          });     
+        } 
+
       }}
-      dangerouslySetInnerHTML={{
+      dangerouslySetInnerHTML={        
+      {        
         __html: cellInfo.value
       }}
     />
   );
 }
 
-render() {
 
-  let data = this.state;
-  let pages = this.state.pages;
+getOrderColumnsTable()
+{
 
 
-   const OrderColumns = [{
+  const OrderColumns = [{
     Header: 'Id',
     accessor: 'Id' // String-based value accessors!
   }, {
@@ -185,29 +158,44 @@ render() {
   } 
 ];
 
-
-const OrderDetailColumns = [{
-  Header: 'Id',
-  accessor: 'Id' // String-based value accessors!
-}, {
-  Header: 'Description',
-  accessor: 'ProductName'
-  //, Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-}, {
-  Header: 'Quantity',
-  accessor: 'Quantity' // String-based value accessors!
-  ,Cell: this.renderEditable
-  //, Cell: row => ( row.value )
-}, {
-  Header: 'Discount',
-  accessor: 'Discount' // String-based value accessors!
-  //, Cell: row => ( row.value )
- , Cell: this.renderEditable
-
+return OrderColumns;
 
 }
-];
- 
+
+getOrderDetailsColumnsTable()
+{
+
+  const OrderDetailColumns = [{
+    Header: 'Id',
+    accessor: 'Id' // String-based value accessors!
+  }, {
+    Header: 'Description',
+    accessor: 'ProductName'
+    //, Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+  }, {
+    Header: 'Quantity',
+    accessor: 'Quantity' // String-based value accessors!
+    ,Cell: this.renderEditable
+    //, Cell: row => ( row.value )
+  }, {
+    Header: 'Discount',
+    accessor: 'Discount' // String-based value accessors!
+    //, Cell: row => ( row.value )
+   , Cell: this.renderEditable
+  
+  
+  }
+  ];
+
+return OrderDetailColumns;
+}
+
+
+render() {
+
+  let data = this.state;
+  let pages = this.state.pages;
+
   return (
     <div>
       <h1>Orders </h1>
@@ -217,7 +205,7 @@ const OrderDetailColumns = [{
 
       data={data.data}
       pages={pages} // Display the total number of pages
-      columns={OrderColumns}    
+      columns={this.getOrderColumnsTable()}    
       defaultPageSize={10}
       showPageSizeOptions = {false}
       className="-striped -highlight"
@@ -234,36 +222,9 @@ const OrderDetailColumns = [{
             </em>
             <br />
             <br />
-            <ReactTable
-              getTdProps={(state, rowInfo, column, instance) => {
-                return {
-                  onClick: (e, handleOriginal) => {
-                    console.log("A Td Element was clicked!");
-                    console.log("it produced this event:", e);
-                    console.log("It was in this column:", column);
-                    console.log("It was in this row:", rowInfo);
-                    console.log("It was in this table instance:", instance);
-
-
-                    this.setLastOrderSelected(rowInfo.index);
-                    
-            
-                    // IMPORTANT! React-Table uses onClick internally to trigger
-                    // events like expanding SubComponents and pivots.
-                    // By default a custom 'onClick' handler will override this functionality.
-                    // If you want to fire the original onClick handler, call the
-                    // 'handleOriginal' function.
-                    if (handleOriginal) {
-                     handleOriginal();
-                    }
-                   
-                   
-
-                  }
-                };
-              }}
+            <ReactTable         
               data={row.original.Details}
-              columns={OrderDetailColumns}
+              columns={this.getOrderDetailsColumnsTable()}
               showPagination={false}                            
               filterable
               defaultSorted={[

@@ -31,21 +31,17 @@ namespace OrdersManager.Services
 
         }
 
-        public void EditOrder(OrderDTO orderDto)
+        public void EditOrderDetail(OrderDetailDTO orderDetailDto)
         {
-            orderRepository = unitOfWork.GetRepository<Order>();
+            orderDetailsRepository = unitOfWork.GetRepository<OrderDetail>();
 
-            var orderEntity = orderRepository.Get(orderDto.Id);
+            var orderDetailEntity = orderDetailsRepository.Get(orderDetailDto.Id);
 
-            orderEntity.Id = orderDto.Id;
-            orderEntity.ShipAdress = (orderDto.shipAdress != null) ? orderDto.shipAdress : orderEntity.ShipAdress;
-            orderEntity.ShipCity = (orderDto.shipCity != null) ? orderDto.shipCity : orderEntity.ShipCity;
-            orderEntity.ShipCountry = (orderDto.shipCountry != null) ? orderDto.shipCountry : orderEntity.ShipCountry;
-            orderEntity.ShipPostalCode = (orderDto.shipPostalCode != null) ? orderDto.shipPostalCode : orderEntity.ShipPostalCode;
-            orderEntity.TotalAmount = (orderDto.TotalAmount > 0) ? orderDto.TotalAmount : orderEntity.TotalAmount;
-            orderEntity.OrdersDetails = orderDto.Details.Select(a => new OrderDetail {Id = a.Id,  ProductId = a.ProductId, Discount = a.Discount, Quantity = a.Quantity }).ToList();
+            orderDetailEntity.Quantity = orderDetailDto.Quantity;
+            orderDetailEntity.Discount = orderDetailDto.Discount;
 
-            orderRepository.Update(orderEntity);
+
+            orderDetailsRepository.Update(orderDetailEntity);
         }
 
 
