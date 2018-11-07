@@ -38,18 +38,14 @@ namespace OrdersManager.Services
             var orderEntity = orderRepository.Get(orderDto.Id);
 
             orderEntity.Id = orderDto.Id;
-            //orderEntity.Created_At = orderDto.Created_At;
-            //orderEntity.CustomerId = orderDto.OrderCustomer.Id;
             orderEntity.ShipAdress = (orderDto.shipAdress != null) ? orderDto.shipAdress : orderEntity.ShipAdress;
             orderEntity.ShipCity = (orderDto.shipCity != null) ? orderDto.shipCity : orderEntity.ShipCity;
             orderEntity.ShipCountry = (orderDto.shipCountry != null) ? orderDto.shipCountry : orderEntity.ShipCountry;
             orderEntity.ShipPostalCode = (orderDto.shipPostalCode != null) ? orderDto.shipPostalCode : orderEntity.ShipPostalCode;
             orderEntity.TotalAmount = (orderDto.TotalAmount > 0) ? orderDto.TotalAmount : orderEntity.TotalAmount;
-
+            orderEntity.OrdersDetails = orderDto.Details.Select(a => new OrderDetail {Id = a.Id,  ProductId = a.ProductId, Discount = a.Discount, Quantity = a.Quantity }).ToList();
 
             orderRepository.Update(orderEntity);
-
-           // unitOfWork.Commit();
         }
 
 
@@ -91,7 +87,7 @@ namespace OrdersManager.Services
                 Id = m.Id,
                 Created_At = m.Created_At,
                 OrderCustomer = m.OrderCustomer,
-                Details = m.OrdersDetails.Select(a => new OrderDetailDTO { Id = a.Id, Discount = a.Discount, ProductName = a.ProductSold.Name, Quantity = a.Quantity }).ToList(),
+                Details = m.OrdersDetails.Select(a => new OrderDetailDTO { Id = a.Id, OrderId= m.Id,  Discount = a.Discount,ProductId = a.ProductId, ProductName = a.ProductSold.Name, Quantity = a.Quantity }).ToList(),
                 shipAdress = m.ShipAdress,
                 shipCity = m.ShipCity,
                 shipCountry= m.ShipCountry,

@@ -124,9 +124,13 @@ namespace OrdersManager.Test
                 var listOrders = postResult as OkNegotiatedContentResult<PagedListDTO<OrderDTO>>;
 
                 //Modify Entity
-                var entity = listOrders.Content.CurrentPageItems[7];
+                var entity = listOrders.Content.CurrentPageItems[0];
                 entity.shipAdress = "sarasa";
-                orderController.PostEditOrder(entity);
+
+            entity.Details[0].Quantity = 10000;
+            entity.Details[0].Discount= 10000;
+
+            orderController.PostEditOrder(entity);
 
                 UnityConfig.Resolve<IUnitOfWork>().Commit();
            

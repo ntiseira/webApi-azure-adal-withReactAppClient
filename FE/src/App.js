@@ -7,6 +7,8 @@ import axios from 'axios';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
+
+
 export const requestData = (page,  sorted, filtered) => {
   return new Promise((resolve, reject) => {
   
@@ -32,6 +34,30 @@ export const requestData = (page,  sorted, filtered) => {
 };
 
 
+export const UpdateDataDetails = (idOrder, details) => {
+  return new Promise((resolve, reject) => {
+  
+    var requestPost = {
+      Id: idOrder,
+      Details: details
+       };
+
+       //requestPost.Details[0] =  details;
+
+       axios({
+        method: 'post',
+        url: 'http://localhost:51590/api/Order/PostEditOrder',
+        data: requestPost
+      })
+      .then(function (response){     
+        resolve(response);
+        })        
+      .catch(function (error) {
+        console.log(error); //TODO: Revisar el manejo de excepciones
+      });
+  });
+};
+
 
 class App extends Component {
   constructor() {
@@ -39,21 +65,36 @@ class App extends Component {
   
     this.state = {
       data: [],
-    //  dataDetails: [],
       pages: null,  
-     // pagesDetails: null,
       loading: true,
       page: 1,
-     // pageDetails:1,
       sorted: "",
-      filtered: ""
-     
+      filtered: "",
+      lastOrderSelected: null
     };
 
 this.fetchData = this.fetchData.bind(this);
 
+this.renderEditable = this.renderEditable.bind(this);
+this.setLastOrderSelected = this.setLastOrderSelected.bind(this);
+this.getLastOrderSelected = this.getLastOrderSelected.bind(this);
+
 }
 
+setLastOrderSelected(id)
+{
+  this.setState({
+    lastOrderSelected: id
+  });
+
+
+}
+
+getLastOrderSelected()
+{
+
+  return this.state.lastOrderSelected;
+}
 
 
 fetchData(state, instance) {
@@ -78,28 +119,41 @@ fetchData(state, instance) {
 }
 
 
+renderEditable = cellInfo => {
+let dataTest = this.getLastOrderSelected();
 
-renderEditable(cellInfo) {
   return (
     <div
       style={{ backgroundColor: "#fafafa" }}
       contentEditable
       suppressContentEditableWarning
       onBlur={e => {
-       // const data = [...this.state.data];
-     //   data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-       // this.setState({ data });
+        const data = [...this.state.data];
+        
+        //data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+        if (data[dataTest].Details.find(a=> a.Id = cellInfo.row._original.Id)[cellInfo.column.id].toString() !== e.target.innerHTML)
+        {
+        this.setState({ data });
+     
+        console.log(dataTest);
+
+       UpdateDataDetails(cellInfo.row._original.OrderId,  data.find(x => x.Id === cellInfo.row._original.OrderId).Details).then(response => {
+                          
+          this.setState({ data });
+      });
+ 
+}
       }}
-    //  dangerouslySetInnerHTML={{
-     //   __html: this.state.data[cellInfo.index][cellInfo.column.id]
-      //}}
+      dangerouslySetInnerHTML={{
+        __html: cellInfo.value
+      }}
     />
   );
 }
 
 render() {
 
-  let data = this.state.data;
+  let data = this.state;
   let pages = this.state.pages;
 
 
@@ -141,12 +195,15 @@ const OrderDetailColumns = [{
   //, Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
 }, {
   Header: 'Quantity',
-  accessor: 'Quantity' ,// String-based value accessors!
-  Cell: this.renderEditable
+  accessor: 'Quantity' // String-based value accessors!
+  ,Cell: this.renderEditable
+  //, Cell: row => ( row.value )
 }, {
   Header: 'Discount',
-  accessor: 'Discount' ,// String-based value accessors!
-  Cell: this.renderEditable
+  accessor: 'Discount' // String-based value accessors!
+  //, Cell: row => ( row.value )
+ , Cell: this.renderEditable
+
 
 }
 ];
@@ -158,7 +215,7 @@ const OrderDetailColumns = [{
       <br/>
     <ReactTable
 
-      data={data}
+      data={data.data}
       pages={pages} // Display the total number of pages
       columns={OrderColumns}    
       defaultPageSize={10}
@@ -178,6 +235,33 @@ const OrderDetailColumns = [{
             <br />
             <br />
             <ReactTable
+              getTdProps={(state, rowInfo, column, instance) => {
+                return {
+                  onClick: (e, handleOriginal) => {
+                    console.log("A Td Element was clicked!");
+                    console.log("it produced this event:", e);
+                    console.log("It was in this column:", column);
+                    console.log("It was in this row:", rowInfo);
+                    console.log("It was in this table instance:", instance);
+
+
+                    this.setLastOrderSelected(rowInfo.index);
+                    
+            
+                    // IMPORTANT! React-Table uses onClick internally to trigger
+                    // events like expanding SubComponents and pivots.
+                    // By default a custom 'onClick' handler will override this functionality.
+                    // If you want to fire the original onClick handler, call the
+                    // 'handleOriginal' function.
+                    if (handleOriginal) {
+                     handleOriginal();
+                    }
+                   
+                   
+
+                  }
+                };
+              }}
               data={row.original.Details}
               columns={OrderDetailColumns}
               showPagination={false}                            

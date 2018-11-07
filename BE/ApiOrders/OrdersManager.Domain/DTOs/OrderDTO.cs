@@ -10,10 +10,9 @@ namespace OrdersManager.Domain.DTOs
     {
         public int Id { get; set; }
 
-       // public string CustomerName { get; set; }
-
         public Customer OrderCustomer{ get; set; }
 
+        public int OrderId { get; set; }
 
         public DateTime Created_At { get; set; }
         public string shipAdress { get; set; }
