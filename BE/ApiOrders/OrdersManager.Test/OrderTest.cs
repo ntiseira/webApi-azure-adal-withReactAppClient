@@ -34,28 +34,7 @@ namespace OrdersManager.Test
             Assert.IsTrue(listOrders.Content.TotalItems  > 0);
         }
 
-
-        [Test]
-        public void GetOrdersFilterShipAdress()
-        {
-
-            var orderController = UnityConfig.Resolve<OrderController>();
-
-
-            BaseCriteriaDTO criteria = new BaseCriteriaDTO
-            {
-                Filter = "Avellaneda 500",
-                OrderAsc = true,
-                OrderBy = "",
-                PageNumber = 1
-            };
-
-            var postResult = orderController.PostGetOrders(criteria);
-
-            var listOrders = postResult as OkNegotiatedContentResult<PagedListDTO<OrderDTO>>;
-
-            Assert.IsTrue(listOrders.Content.TotalItems > 0);
-        }
+             
 
         [Test]
         public void GetOrdersFilterShipCity()
