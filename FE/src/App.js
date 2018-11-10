@@ -252,7 +252,12 @@ render() {
       onFetchData={this.fetchData} // Request new data when things change
       filterable
       freezeWhenExpanded={true}
-
+      defaultSorted={[
+        {
+          id: "Id",
+          desc: false
+        }
+      ]}
       SubComponent={row => {
         return (
           <div style={{ padding: "20px" }}>
