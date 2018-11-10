@@ -44,7 +44,7 @@ namespace OrdersManager.Test
 
             BaseCriteriaDTO criteria = new BaseCriteriaDTO
             {
-                Filter = "Rosario",
+                Filter = "Buenos Aires",
                 OrderAsc = true,
                 OrderBy = "",
                 PageNumber = 1
