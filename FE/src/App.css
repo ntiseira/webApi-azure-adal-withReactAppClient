@@ -1,4 +1,4 @@
-.ReactTable table  {
+ table  {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif ;
   border-collapse: collapse ;
   width: 100% ;
@@ -6,24 +6,19 @@
 
 
 
-.ReactTable td,  th {
+ td,  th {
   border: 1px solid #ddd ;
   padding: 8px ;
 }
 
-.ReactTable tr:nth-child(even){background-color: #f2f2f2 ;}
+ tr:nth-child(even){background-color: #f2f2f2 ;}
 
-.ReactTable tr:hover {background-color: #ddd ; }
+tr:hover {background-color: #ddd ; }
 
-.ReactTable  th .rt-thead {
+ th .rt-thead {
   padding-top: 12px ; 
   padding-bottom: 12px ;
   text-align: left ;
   background-color: #4CAF50 ;
   color: white ; 
-}
-
-.ReactTable {
-  border-right: 2px solid rgba(0,0,0,0.6) ;
-  border-left: 2px solid rgba(0,0,0,0.6) ;
 }
