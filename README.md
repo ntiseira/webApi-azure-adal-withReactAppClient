@@ -10,8 +10,7 @@ This sample demonstrates a React application calling a web API that is secured u
 
 
 
-Image of flow
-
+![alt text](https://github.com/ntiseira/webApi-azure-adal-withReactAppClient/blob/master/ReadmeFiles/flow app.png)
 
 
 3-show aplication
