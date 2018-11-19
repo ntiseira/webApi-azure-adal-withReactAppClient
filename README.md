@@ -3,7 +3,7 @@
 About this sample
 
 
-Scenario
+**Scenario**
 
 This sample demonstrates a React application calling a web API that is secured using Azure AD.
 
@@ -49,12 +49,12 @@ To run this sample, you'll need:
 
 
 
-**Step 1: Clone or download this repository
+**Step 1: Clone or download this repository**
 
 git clone https://github.com/ntiseira/webApi-azure-adal-withReactAppClient.git
 
 
-**Step 2: Register the sample with your Azure Active Directory tenant
+**Step 2: Register the sample with your Azure Active Directory tenant**
 
 There are two projects in this sample. Each needs to be separately registered in your Azure AD tenant. <br/>
 
@@ -69,10 +69,10 @@ Click on All services in the left-hand nav, and choose Azure Active Directory.<b
 
 
 **Note:
-In the next steps, you might need the tenant name (or directory name) or the tenant ID (or directory ID). These are presented in the Properties of the Azure Active Directory window respectively as Name and Directory ID<br/>
+In the next steps, you might need the tenant name (or directory name) or the tenant ID (or directory ID). These are presented in the Properties of the Azure Active Directory window respectively as Name and Directory ID ** <br/>
 
 
-**Register the service app (OrdersManager)<br/>
+**Register the service app (OrdersManager)** <br/>
 
 -In the Azure Active Directory pane, click on App registrations and choose New application registration.<br/>
 -Enter a friendly name for the application, for example 'OrdersApi' and select 'Web app / API' as the Application Type.<br/>
@@ -84,7 +84,7 @@ In the next steps, you might need the tenant name (or directory name) or the ten
 
 
 
-**Register the client React app (OrdersReact)<br/>
+**Register the client React app (OrdersReact)** <br/>
 
 -In the Azure Active Directory pane, click on App registrations and choose New application registration.<br/>
 -Enter a friendly name for the application, for example 'OrdersReact' and select 'Native' as the Application Type.<br/>
@@ -99,7 +99,7 @@ In the next steps, you might need the tenant name (or directory name) or the ten
 
 In the steps below, "ClientID" is the same as "Application ID" or "AppId".<br/>
 
-**Open the solution in Visual Studio to configure the web api project.<br/>
+**Open the solution in Visual Studio to configure the web api project** <br/>
 
 Configure the service project<br/>
 
@@ -116,11 +116,11 @@ Find the property key instance and replace the existing value with https://login
 Find the property key ida:Tenant and replace the existing value with your Azure AD tenant name.<br/>
 Find the property key ida:ClientId and replace the existing value with the application ID (clientId) of the OrdersReact application copied from the Azure portal.<br/>
 
-**Step 4: Run scripts db
+**Step 4: Run scripts db**
 
 https://github.com/ntiseira/webApi-azure-adal-withReactAppClient/tree/master/BE/Scripts
 
-**Step 5: Run the sample
+**Step 5: Run the sample**
 
 Web api
 
@@ -142,9 +142,7 @@ If you find a bug in the sample, please raise the issue on GitHub Issues.
 To provide a recommendation, visit the following User Voice page.
 
 Contributing
-If you'd like to contribute to this sample, see CONTRIBUTING.MD.
-
-This project has adopted the Microsoft Open Source Code of Conduct. For more information, see the Code of Conduct FAQ or contact opencode@microsoft.com with any additional questions or comments.
+- If you wish to make code changes to samples, or contribute something new, please follow the [GitHub Forks / Pull requests model](https://help.github.com/articles/fork-a-repo/): Fork the sample repo, make the change and propose it back by submitting a pull request.
 
 
 More information
