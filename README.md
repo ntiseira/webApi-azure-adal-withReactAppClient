@@ -80,7 +80,7 @@ In the next steps, you might need the tenant name (or directory name) or the ten
 -Click Create to create the application.<br/>
 -In the succeeding page, Find the Application ID value and record it for later. You'll need it to configure the Visual Studio configuration file for this project.<br/>
 -Then click on Settings, and choose Properties.<br/>
--For the App ID URI, replace the guid in the generated URI 'http://<your_tenant_name>/<guid>', with the name of your service, for example, 'http://<your_tenant_name>/OrdersApi' (replacing <your_tenant_name> with the name of your Azure AD tenant)<br/>
+-For the App ID URI, replace the guid in the generated URI 'https://<your_tenant_name>/<guid>', with the name of your service, for example, 'https://<your_tenant_name>/OrdersApi' (replacing <your_tenant_name> with the name of your Azure AD tenant)<br/>
 
 
 
@@ -103,15 +103,16 @@ In the steps below, "ClientID" is the same as "Application ID" or "AppId".<br/>
 
 Configure the service project<br/>
 
--Open the TodoListService\Web.Config file<br/>
+-Open the OrdersManager.Api\Web.Config file<br/>
 -Find the app key ida:Tenant and replace the existing value with your Azure AD tenant name.<br/>
--Find the app key ida:Audience and replace the existing value with the App ID URI you registered earlier for the TodoListService-NativeDotNet app. For instance use https://<your_tenant_name>/TodoListService-NativeDotNet, where <your_tenant_name> is the name of your Azure AD tenant.<br/>
+-Find the app key ida:Audience and replace the existing value with the App ID URI you registered earlier for the OrdersApi app. For instance use https://<your_tenant_name>/OrdersApi, where <your_tenant_name> is the name of your Azure AD tenant.<br/>
 
 Open some text editor and to configure the react app project
 
 Configure the client project
 
 Open the FE\src\AdalReact\adalConfig.js file<br/>
+Find the property key endpoint and replace the existing value with https://<your_tenant_name>/OrdersApi.<br/>
 Find the property key instance and replace the existing value with https://login.microsoftonline.com/.<br/>
 Find the property key ida:Tenant and replace the existing value with your Azure AD tenant name.<br/>
 Find the property key ida:ClientId and replace the existing value with the application ID (clientId) of the OrdersReact application copied from the Azure portal.<br/>
