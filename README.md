@@ -2,6 +2,9 @@
 
 About this sample
 
+
+Scenario
+
 This sample demonstrates a React application calling a web API that is secured using Azure AD.
 
 1-The React application uses the Active Directory Authentication Library (REACT ADAL) to obtain a JWT access token from Azure Active Directory (Azure AD) through the OAuth 2.0 protocol:
@@ -13,15 +16,26 @@ This sample demonstrates a React application calling a web API that is secured u
 ![alt text](https://github.com/ntiseira/webApi-azure-adal-withReactAppClient/blob/master/ReadmeFiles/flow%20app.png)
 
 
-3-show aplication
 
+Interaction Diagram 
 
-
+![alt text](https://github.com/ntiseira/webApi-azure-adal-withReactAppClient/blob/master/ReadmeFiles/OAuth%202.0%20Implicit%20Grant%20flow..png)
 
 
 For more information about how the protocols work in this scenario and other scenarios, see Authentication Scenarios for Azure AD.
 
 
+Once you've started the OrdersApi, you can run the React application, and then view items in the order list. 
+
+
+React Application
+
+![alt text](https://github.com/ntiseira/webApi-azure-adal-withReactAppClient/blob/master/ReadmeFiles/reactApp.jpg)
+
+
+Web api
+
+![alt text](https://github.com/ntiseira/webApi-azure-adal-withReactAppClient/blob/master/ReadmeFiles/webApi.jpg)
 
 
 How to run this sample
