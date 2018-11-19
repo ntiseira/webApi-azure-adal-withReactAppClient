@@ -95,7 +95,7 @@ In the next steps, you might need the tenant name (or directory name) or the ten
 -Configure Permissions for your application. To that extent, in the Settings menu, choose the 'Required permissions' section and then, click on Add, then Select an API, and type OrdersApi in the textbox. Then, click on Select Permissions and select Access 'OrdersApi'.<br/>
 
 
-**Step 3: Configure the sample to use your Azure AD tenant<br/>
+**Step 3: Configure the sample to use your Azure AD tenant** <br/>
 
 In the steps below, "ClientID" is the same as "Application ID" or "AppId".<br/>
 
