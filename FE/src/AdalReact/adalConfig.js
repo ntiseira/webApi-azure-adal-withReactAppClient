@@ -1,13 +1,13 @@
 import { AuthenticationContext, adalFetch, withAdalLogin, adalGetToken } from 'react-adal';
 
 // Endpoint URL
-export const endpoint = 'https://NICOLASTISEIRAhotmail.onmicrosoft.com/OrdersApi';
+export const endpoint = 'https://ntiseirahotmail.onmicrosoft.com/OrdersApi';
 
 
 export const adalConfig = {
   instance: 'https://login.microsoftonline.com/',
-tenant: '5d887015-fb2b-4ffe-a21e-28202b88889a',
-clientId: '2e5bfb38-bd69-4f2b-8f0e-75c5761f047a',
+tenant: 'dac31651-9c13-49b9-b8aa-fcffadcec04a',
+clientId: '44be3f69-df2f-44d7-9ccc-99f888098369',
 postLogoutRedirectUri: window.location.origin,
   cacheLocation: 'localStorage',
 
