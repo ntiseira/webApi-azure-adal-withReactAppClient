@@ -44,7 +44,7 @@ To run this sample, you'll need:
 -Sql express 2017<br/>
 -NodeJs<br/>
 -An Internet connection<br/>
--An Azure Active Directory (Azure AD) tenant. For more information on how to get an Azure AD tenant, see How to get an Azure AD tenant (link azure ad https://docs.microsoft.com/es-es/azure/active-directory/develop/quickstart-create-new-tenant)<br/>
+-An Azure Active Directory (Azure AD) tenant. For more information on how to get an Azure AD tenant, see How to get an Azure AD tenant (https://docs.microsoft.com/es-es/azure/active-directory/develop/quickstart-create-new-tenant)<br/>
 -A user account in your Azure AD tenant. This sample will not work with a Microsoft account (formerly Windows Live account). Therefore, if you signed in to the Azure portal with a Microsoft account and have never created a user account in your directory before, you need to do that now.<br/>
 
 
@@ -129,9 +129,9 @@ Clean the solution, rebuild the solution, and run it. You might want to go into 
 React app
 
 -Open windows command line, or node console<br/>
--cd FE\<br/>
--npm install<br/>
--npm start<br/>
+-cd FE\  <br/>
+-npm install  <br/>
+-npm start  <br/>
 
 
 Community Help and Support
