@@ -140,8 +140,6 @@ Use Stack Overflow to get support from the community. Ask your questions on Stac
 
 If you find a bug in the sample, please raise the issue on GitHub Issues.
 
-To provide a recommendation, visit the following User Voice page.
-
 Contributing
 - If you wish to make code changes to samples, or contribute something new, please follow the [GitHub Forks / Pull requests model](https://help.github.com/articles/fork-a-repo/): Fork the sample repo, make the change and propose it back by submitting a pull request.
 
